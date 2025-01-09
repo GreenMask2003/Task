@@ -1,2 +1,2 @@
 # Task
-Project
+Internship Task for Sly Solutions
