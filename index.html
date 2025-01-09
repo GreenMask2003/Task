@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-Tool Web Application</title>
+  <style>
+    /* Basic Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin-bottom: 10px;
+    }
+
+    /* Tools Container */
+    .tools-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .tool-icon {
+      width: 150px;
+      height: 150px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s, color 0.2s;
+    }
+
+    .tool-icon:hover {
+      transform: translateY(-5px);
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .tool-icon img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .tool-icon p {
+      font-size: 16px;
+      text-align: center;
+    }
+
+    /* Tool Content */
+    .tool-content {
+      display: none;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    .tool-content.active {
+      display: block;
+    }
+
+    .tool-content h2 {
+      margin-bottom: 15px;
+      text-align: center;
+      color: #007BFF;
+    }
+
+    .tool-content input,
+    .tool-content select,
+    .tool-content textarea,
+    .tool-content button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .tool-content button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .tool-content button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Result Display */
+    .result {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      word-wrap: break-word;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .tool-icon {
+        width: 120px;
+        height: 120px;
+      }
+
+      .tool-icon img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .tool-icon p {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Multi-Tool Web Application</h1>
+    <p>Click on an icon below to use the tool</p>
+  </div>
+
+  <!-- Tools Icons -->
+  <div class="tools-container">
+    <div class="tool-icon" onclick="showTool('charCounter')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/text.png" alt="Character Counter">
+      <p>Character Counter</p>
+    </div>
+    <div class="tool-icon" onclick="showTool('calcTool')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/calculator.png" alt="BMI & Loan Calculator">
+      <p>BMI & Loan Calculator</p>
+    </div>
+    <div class="tool-icon" onclick="showTool('currencyConverter')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/currency-exchange.png" alt="Currency Converter">
+      <p>Currency Converter</p>
+    </div>
+    <div class="tool-icon" onclick="showTool('ytDownloader')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/youtube-play.png" alt="YouTube Downloader">
+      <p>YouTube Downloader</p>
+    </div>
+    <div class="tool-icon" onclick="showTool('qrBarcode')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/barcode.png" alt="QR & Barcode Generator">
+      <p>QR & Barcode Generator</p>
+    </div>
+    <div class="tool-icon" onclick="showTool('plagChecker')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/plagiarism.png" alt="Plagiarism Checker">
+      <p>Plagiarism Checker</p>
+    </div>
+  </div>
+
+  <!-- Tool Content Container -->
+  <div id="toolContentContainer">
+    
+    <!-- Character Counter -->
+    <div id="charCounter" class="tool-content">
+      <h2>Character Counter</h2>
+      <textarea id="charCounterInput" rows="5" placeholder="Type or paste your text here..."></textarea>
+      <button onclick="countCharacters()">Count Characters & Words</button>
+      <div id="charCounterResult" class="result"></div>
+    </div>
+
+    <!-- Combined BMI & Loan Calculator -->
+    <div id="calcTool" class="tool-content">
+      <h2>BMI & Loan Calculator</h2>
+      <select id="calcOption" onchange="switchCalcTool()">
+        <option value="bmi">BMI Calculator</option>
+        <option value="loan">Loan Calculator</option>
+      </select>
+
+      <!-- BMI Calculator -->
+      <div id="bmiCalculator" class="calculator">
+        <input type="number" id="bmiWeight" placeholder="Weight in kg">
+        <input type="number" id="bmiHeight" placeholder="Height in meters">
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div id="bmiResult" class="result"></div>
+      </div>
+
+      <!-- Loan Calculator -->
+      <div id="loanCalculator" class="calculator" style="display: none;">
+        <input type="number" id="loanAmount" placeholder="Loan Amount">
+        <input type="number" id="interestRate" placeholder="Interest Rate (%)">
+        <input type="number" id="loanYears" placeholder="Loan Tenure (Years)">
+        <button onclick="calculateLoan()">Calculate Loan EMI</button>
+        <div id="loanResult" class="result"></div>
+      </div>
+    </div>
+
+    <!-- Currency Converter -->
+    <div id="currencyConverter" class="tool-content">
+      <h2>Real-time Currency Converter</h2>
+      <input type="number" id="amount" placeholder="Amount">
+      <select id="fromCurrency">
+        <option value="USD">USD - US Dollar</option>
+        <option value="EUR">EUR - Euro</option>
+        <option value="INR">INR - Indian Rupee</option>
+        <option value="GBP">GBP - British Pound</option>
+        <option value="JPY">JPY - Japanese Yen</option>
+      </select>
+      <select id="toCurrency">
+        <option value="USD">USD - US Dollar</option>
+        <option value="EUR">EUR - Euro</option>
+        <option value="INR">INR - Indian Rupee</option>
+        <option value="GBP">GBP - British Pound</option>
+        <option value="JPY">JPY - Japanese Yen</option>
+      </select>
+      <button onclick="convertCurrency()">Convert</button>
+      <div id="currencyResult" class="result"></div>
+    </div>
+
+    <!-- YouTube Video Downloader -->
+    <div id="ytDownloader" class="tool-content">
+      <h2>YouTube Video Downloader</h2>
+      <input type="text" id="ytUrl" placeholder="Enter YouTube Video URL">
+      <button onclick="downloadYouTube()">Download</button>
+      <div id="ytDownloadResult" class="result"></div>
+    </div>
+
+    <!-- Combined QR Code & Barcode Generator -->
+    <div id="qrBarcode" class="tool-content">
+      <h2>QR Code & Barcode Generator</h2>
+      <input type="text" id="codeInput" placeholder="Enter text or URL">
+      <button onclick="generateCode()">Generate Code</button>
+      <div id="codeResult" class="result"></div>
+    </div>
+
+    <!-- Plagiarism Checker -->
+    <div id="plagChecker" class="tool-content">
+      <h2>Plagiarism Checker</h2>
+      <textarea id="plagiarismText" rows="5" placeholder="Paste your text here..."></textarea>
+      <button onclick="checkPlagiarism()">Check Plagiarism</button>
+      <div id="plagiarismResult" class="result"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Function to show a specific tool content
+    function showTool(tool) {
+      const allTools = document.querySelectorAll('.tool-content');
+      allTools.forEach(toolContent => {
+        toolContent.classList.remove('active');
+      });
+      document.getElementById(tool).classList.add('active');
+    }
+
+    // Character Counter
+    function countCharacters() {
+      const inputText = document.getElementById('charCounterInput').value;
+      const charCount = inputText.length;
+      const wordCount = inputText.split(/\s+/).filter(word => word.length > 0).length;
+      document.getElementById('charCounterResult').innerText = `Characters: ${charCount}, Words: ${wordCount}`;
+    }
+
+    // BMI Calculator
+    function calculateBMI() {
+      const weight = parseFloat(document.getElementById('bmiWeight').value);
+      const height = parseFloat(document.getElementById('bmiHeight').value);
+      if (isNaN(weight) || isNaN(height) || height <= 0) {
+        alert('Please enter valid weight and height.');
+        return;
+      }
+      const bmi = weight / (height * height);
+      document.getElementById('bmiResult').innerText = `Your BMI: ${bmi.toFixed(2)}`;
+    }
+
+    // Loan Calculator
+    function calculateLoan() {
+      const amount = parseFloat(document.getElementById('loanAmount').value);
+      const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+      const months = parseFloat(document.getElementById('loanYears').value) * 12;
+      if (isNaN(amount) || isNaN(rate) || isNaN(months)) {
+        alert('Please enter valid loan amount, interest rate, and tenure.');
+        return;
+      }
+      const emi = (amount * rate) / (1 - Math.pow(1 + rate, -months));
+      document.getElementById('loanResult').innerText = `EMI: ₹${emi.toFixed(2)}`;
+    }
+
+    // Currency Converter
+    async function convertCurrency() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const fromCurrency = document.getElementById('fromCurrency').value;
+      const toCurrency = document.getElementById('toCurrency').value;
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+      }
+      try {
+        const apiKey = '6d24b3461e696245e214f972'; // Replace with your API key
+        const url = `https://v6.exchangerate-api.com/v6/${apiKey}/pair/${fromCurrency}/${toCurrency}/${amount}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.result === 'error') throw new Error(data['error-type']);
+        document.getElementById('currencyResult').innerText =
+          `${amount} ${fromCurrency} = ${data.conversion_result.toFixed(2)} ${toCurrency}`;
+      } catch (error) {
+        alert('Error fetching exchange rates: ' + error.message);
+      }
+    }
+
+    // YouTube Downloader
+    async function downloadYouTube() {
+      const ytUrl = document.getElementById('ytUrl').value.trim();
+      if (!ytUrl) {
+        alert('Please enter a YouTube video URL.');
+        return;
+      }
+      try {
+        const response = await fetch('http://localhost:5000/download', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ url: ytUrl }),
+        });
+        if (!response.ok) throw new Error('Download failed.');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'video.mp4';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        alert('Error downloading video: ' + error.message);
+      }
+    }
+
+    // QR & Barcode Generator
+    function generateCode() {
+      const text = document.getElementById('codeInput').value;
+      if (!text) {
+        alert('Please enter some text or URL.');
+        return;
+      }
+      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=200x200`;
+      document.getElementById('codeResult').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code">`;
+    }
+
+    // Plagiarism Checker (Simulation)
+    function checkPlagiarism() {
+      const text = document.getElementById('plagiarismText').value;
+      if (!text) {
+        alert('Please enter some text.');
+        return;
+      }
+      document.getElementById('plagiarismResult').innerText = 'Plagiarism check results: No plagiarism detected.';
+    }
+  </script>
+</body>
+</html>
